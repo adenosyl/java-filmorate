@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
     private final List<User> users = new ArrayList<>();
+    private int nextId = 1;
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -22,21 +25,31 @@ public class UserController {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
+        if (user.getId() == 0) {
+            user.setId(nextId++);
+        }
         users.add(user);
         log.info("Создан пользователь: {}", user);
         return ResponseEntity.ok(user);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
         validateUser(user);
-        users.removeIf(u -> u.getId() == user.getId());
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId() == user.getId()) {
+                if (user.getName() == null || user.getName().isBlank()) {
+                    user.setName(user.getLogin());
+                }
+                users.set(i, user);
+                log.info("Обновлен пользователь: {}", user);
+                return ResponseEntity.ok(user);
+            }
         }
-        users.add(user);
-        log.info("Обновлен пользователь: {}", user);
-        return ResponseEntity.ok(user);
+        log.error("Пользователь с id = {} не найден", user.getId());
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Пользователь не найден");
+        return ResponseEntity.status(404).body(error);
     }
 
     @GetMapping
