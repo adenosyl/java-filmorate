@@ -169,9 +169,9 @@ public class FilmDbStorage implements FilmStorage {
     private Set<Genre> getGenresByFilmId(int filmId) {
         // Жанры должны возвращаться в порядке возрастания id
         String sql = """
-        SELECT g.id, g.name 
+        SELECT g.id, g.name
         FROM genres g
-        JOIN film_genres fg ON g.id = fg.genre_id 
+        JOIN film_genres fg ON g.id = fg.genre_id
         WHERE fg.film_id = ?
         ORDER BY g.id
     """;
