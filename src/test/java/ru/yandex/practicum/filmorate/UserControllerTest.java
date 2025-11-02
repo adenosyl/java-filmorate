@@ -24,22 +24,22 @@ class UserControllerTest {
     @Test
     void testCreateUserAndAddRemoveFriendOneWay() throws Exception {
         String user1Json = """
-                {
+    {
                   "email": "user1@example.com",
                   "login": "user1",
                   "name": "User One",
                   "birthday": "1990-01-01"
                 }
-                """;
+    """;
 
-        String user2Json = """
-                {
+        String user2Json = """ 
+    {
                   "email": "user2@example.com",
                   "login": "user2",
                   "name": "User Two",
                   "birthday": "1991-02-02"
                 }
-                """;
+    """;
 
         String response1 = mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
