@@ -56,25 +56,20 @@ class UserControllerTest {
         int userId1 = objectMapper.readTree(response1).get("id").asInt();
         int userId2 = objectMapper.readTree(response2).get("id").asInt();
 
-        // Добавляем user2 в друзья user1
         mockMvc.perform(put("/users/" + userId1 + "/friends/" + userId2))
                 .andExpect(status().isOk());
 
-        // Проверяем, что user2 в друзьях user1
         mockMvc.perform(get("/users/" + userId1 + "/friends"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(userId2));
 
-        // Проверяем, что user1 не в друзьях user2 (односторонняя дружба)
         mockMvc.perform(get("/users/" + userId2 + "/friends"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
 
-        // Удаляем дружбу
         mockMvc.perform(delete("/users/" + userId1 + "/friends/" + userId2))
                 .andExpect(status().isOk());
 
-        // Проверяем, что у user1 теперь нет друзей
         mockMvc.perform(get("/users/" + userId1 + "/friends"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
