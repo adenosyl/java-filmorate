@@ -23,7 +23,7 @@ class GenreControllerTest {
         mockMvc.perform(get("/genres"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$", hasSize(5)));
+                .andExpect(jsonPath("$", hasSize(6)));
     }
 
     @Test

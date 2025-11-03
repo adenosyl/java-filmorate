@@ -18,6 +18,6 @@ class GenreDbStorageTest {
     @Test
     void testFindAllGenres() {
         List<Genre> genres = genreDbStorage.findAll();
-        assertThat(genres).hasSize(5);
+        assertThat(genres).hasSize(6);
     }
 }

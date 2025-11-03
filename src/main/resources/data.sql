@@ -3,7 +3,8 @@ MERGE INTO genres (id, name) KEY(id) VALUES
     (2, 'Драма'),
     (3, 'Мультфильм'),
     (4, 'Триллер'),
-    (5, 'Документальный');
+    (5, 'Документальный'),
+    (6, 'Боевик');
 
 MERGE INTO mpa (id, name) KEY(id) VALUES
     (1, 'G'),
