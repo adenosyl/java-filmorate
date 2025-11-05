@@ -44,22 +44,21 @@ public class UserService {
         return userStorage.findAll();
     }
 
+    // Одностороннее добавление друга (требование ТЗ)
     public void addFriend(int userId, int friendId) {
-        User user = existsUser(userId);
-        User friend = existsUser(friendId);
-        user.getFriends().add(friendId);
-        friend.getFriends().add(userId);
-        userStorage.update(user);
-        userStorage.update(friend);
+        if (userId == friendId) {
+            throw new ValidationException("Невозможно добавить самого себя в друзья");
+        }
+        existsUser(userId);
+        existsUser(friendId);
+        userStorage.addFriend(userId, friendId);
     }
 
+    // Одностороннее удаление друга
     public void removeFriend(int userId, int friendId) {
-        User user = existsUser(userId);
-        User friend = existsUser(friendId);
-        user.getFriends().remove(friendId);
-        friend.getFriends().remove(userId);
-        userStorage.update(user);
-        userStorage.update(friend);
+        existsUser(userId);
+        existsUser(friendId);
+        userStorage.removeFriend(userId, friendId);
     }
 
     public Set<User> getFriends(int userId) {
